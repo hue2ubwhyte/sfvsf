@@ -10,6 +10,7 @@ bot = telebot.TeleBot(TOKEN)
 def send_current_time(message):
     # 获取当前时间
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    print(now)
     # 发送时间到用户
     bot.send_message(message.chat.id, f"当前时间是: {now}")
 
