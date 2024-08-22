@@ -1,0 +1,35 @@
+name: Run App for 48 Hours
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-part1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1440  # 设置为 24 小时
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run app.py part 1
+      run: python app.py
+    - name: Save state
+      run: echo "Part 1 completed" > state.txt
+    - name: Upload state
+      uses: actions/upload-artifact@v2
+      with:
+        name: state
+        path: state.txt
+
+  run-part2:
+    needs: run-part1
+    runs-on: ubuntu-latest
+    timeout-minutes: 1440  # 设置为 24 小时
+    steps:
+    - uses: actions/checkout@v2
+    - name: Download state
+      uses: actions/download-artifact@v2
+      with:
+        name: state
+    - name: Check state
+      run: cat state.txt
+    - name: Run app.py part 2
+      run: python app.py
