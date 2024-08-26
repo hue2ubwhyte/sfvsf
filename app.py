@@ -1,18 +1,29 @@
+import time
+import sys
+import threading
 import telebot
-from datetime import datetime
 
-# 替换 'YOUR_TOKEN_HERE' 为你的 Telegram Bot Token
-TOKEN = '6825207495:AAEdlZhWKNFi5EOvTqAaRyg_55pGWYRk3Fw'
+# 假设这是你的 bot token
+TOKEN = '6410852034:AAFVFKV7vex0sKsfbNuGHvKOCazpm1-r2LM'
 bot = telebot.TeleBot(TOKEN)
 
-# 定义命令 '/uuu' 的处理器
-@bot.message_handler(commands=['uuu'])
-def send_current_time(message):
-    # 获取当前时间
-    now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    print(now)
-    # 发送时间到用户
-    bot.send_message(message.chat.id, f"当前时间是: {now}")
+def bot_polling():
+    bot.polling(none_stop=True)
 
-# 轮询
-bot.polling()
+def timeout_monitor(max_time):
+    start_time = time.time()
+    while True:
+        time.sleep(1)  # 每秒检查一次
+        if time.time() - start_time > max_time:
+            print("Reached the maximum run time. Exiting...")
+            bot.stop_polling()  # 停止 bot 轮询
+            sys.exit(0)  # 退出程序
+
+# 设置运行的最大时间（秒）
+max_time = 180  # 3分钟
+
+# 启动 bot 轮询线程
+threading.Thread(target=bot_polling).start()
+
+# 启动超时监控线程
+threading.Thread(target=timeout_monitor, args=(max_time,)).start()
