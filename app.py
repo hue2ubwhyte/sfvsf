@@ -7,6 +7,11 @@ import telebot
 TOKEN = '6410852034:AAFVFKV7vex0sKsfbNuGHvKOCazpm1-r2LM'
 bot = telebot.TeleBot(TOKEN)
 
+
+@bot.message_handler(commands=['start'])
+def start(message):
+    bot.reply_to(message, "bot使用方法")
+    
 def bot_polling():
     bot.polling(none_stop=True)
 
