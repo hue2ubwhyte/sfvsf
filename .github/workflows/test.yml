@@ -6,7 +6,6 @@ on:
 jobs:
   job1:
     runs-on: ubuntu-latest
-    timeout-minutes: 2
     steps:
     - name: checkout
       uses: actions/checkout@v4
@@ -22,7 +21,7 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run app.py
-      run: python app.py
+      run: timeout 3m python app.py
 
   job2:
     needs: job1
